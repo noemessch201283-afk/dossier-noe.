@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dossier ultra secret d'Inès</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 25px 15px;
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  background: linear-gradient(-45deg,#180d29,#63254d,#251b48,#8b315d);
+  background-size: 400% 400%;
+  animation: fond 12s ease infinite;
+}
+
+@keyframes fond {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+}
+
+h1 {
+  color: #ffb6d7;
+  font-size: 32px;
+  text-shadow: 0 0 15px #ff69ad;
+}
+
+.intro {
+  line-height: 1.7;
+  color: #ffe0ee;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+  margin-top: 25px;
+}
+
+button {
+  padding: 17px 8px;
+  min-height: 65px;
+  border: 1px solid #ffadd2;
+  border-radius: 15px;
+  background: rgba(255,255,255,.12);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .3s;
+}
+
+button:hover {
+  background: #a83d76;
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px #ff80b8;
+}
+
+button:active {
+  transform: scale(.92);
+}
+
+#message {
+  margin-top: 25px;
+  min-height: 115px;
+  padding: 25px 15px;
+  border-radius: 20px;
+  border: 1px solid #ffadd2;
+  background: rgba(255,180,220,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.apparition {
+  animation: apparition .45s ease;
+}
+
+@keyframes apparition {
+  from { opacity: 0; transform: translateY(15px) scale(.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.compteur {
+  margin-top: 25px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.1);
+}
+
+.compteur h2 {
+  font-size: 35px;
+  color: #ffb6d7;
+}
+
+.coeur {
+  position: fixed;
+  top: -30px;
+  color: #ffadd2;
+  pointer-events: none;
+  animation: tomber 4s linear forwards;
+  z-index: 10;
+}
+
+@keyframes tomber {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+footer {
+  margin-top: 35px;
+  color: #f4c5dc;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>DOSSIER ULTRA SECRET D'INÈS</h1>
+
+<p class="intro">
+Accès très très confidentiel.<br>
+Bienvenue dans ton dossier personnel, Inès.<br>
+20 boutons, 20 surprises et beaucoup trop de compliments.
+</p>
+
+<div class="grid" id="boutons"></div>
+
+<div id="message">
+Clique sur un dossier pour découvrir ta première surprise...
+</div>
+
+<div class="compteur">
+<p>Le compteur officiel des câlins qu'Inès mérite</p>
+<h2 id="nombre">0</h2>
+<button onclick="câlin()">Réclamer un câlin</button>
+</div>
+
+<footer>
+Dossier classé secret — Réservé à Inès.
+<br>Interdiction de ne pas sourire.
+</footer>
+
+</div>
+
+<script>
+const surprises = [
+["Le dossier du sourire","Inès, ton sourire devrait être remboursé par la Sécurité sociale tellement il fait du bien."],
+["Alerte beauté","Attention : une personne beaucoup trop incroyable vient d'entrer dans le dossier."],
+["Erreur informatique","Erreur 404 : aucun défaut trouvé chez Inès."],
+["La vérité","Tu es une personne vraiment précieuse. Ne l'oublie jamais."],
+["Câlin gratuit","Bon, celui-là ne se télécharge pas. Il faudra le réclamer en vrai."],
+["Breaking news","Les scientifiques confirment : Inès est une personne exceptionnelle."],
+["Le super pouvoir","Ton super pouvoir ? Réussir à faire sourire les gens sans même essayer."],
+["Attention danger","Risque élevé de devenir accro à ta bonne humeur."],
+["Le classement","Première place mondiale dans la catégorie des personnes géniales."],
+["Le mystère","Comment peut-on être aussi adorable ? L'enquête continue."],
+["Le diplôme","Félicitations ! Tu as obtenu le diplôme officiel de personne incroyable."],
+["Une petite vérité","Tu mérites plein de bonheur, aujourd'hui et tous les jours."],
+["Le détecteur","Bip bip... Niveau de gentillesse beaucoup trop élevé."],
+["Le cadeau","Ton cadeau du jour : un compliment que tu ne peux pas refuser."],
+["Le rappel","Même quand tu doutes, n'oublie pas toutes tes qualités."],
+["La comparaison","Tu es plus rare qu'un téléphone qui ne tombe jamais à 1 %."],
+["Le secret","Il y a quelqu'un qui a beaucoup de chance de te connaître."],
+["Le rapport","Après vérification, tu es officiellement extraordinaire."],
+["Le dernier avertissement","Attention : ce dossier contient une quantité illimitée de compliments."],
+["Le dossier final","Inès, reste comme tu es. Tu es déjà une très belle personne."]
+];
+
+const grille = document.getElementById("boutons");
+
+surprises.forEach((item,index) => {
+  const bouton = document.createElement("button");
+  bouton.textContent = item[0];
+
+  bouton.onclick = () => {
+    afficher(item[1]);
+    pluie();
+  };
+
+  grille.appendChild(bouton);
+});
+
+function afficher(texte) {
+  const zone = document.getElementById("message");
+  zone.classList.remove("apparition");
+  void zone.offsetWidth;
+  zone.textContent = texte;
+  zone.classList.add("apparition");
+}
+
+let total = 0;
+
+function câlin() {
+  total++;
+  document.getElementById("nombre").textContent = total;
+  afficher("Câlin numéro " + total + " réclamé ! Inès, tu en mérites une quantité illimitée.");
+  pluie();
+}
+
+function pluie() {
+  for(let i=0;i<20;i++) {
+    const coeur = document.createElement("div");
+    coeur.className = "coeur";
+    coeur.textContent = "♥";
+    coeur.style.left = Math.random()*100 + "vw";
+    coeur.style.fontSize = (15+Math.random()*25) + "px";
+    coeur.style.animationDuration = (2+Math.random()*3) + "s";
+
+    document.body.appendChild(coeur);
+    setTimeout(() => coeur.remove(),5000);
+  }
+}
+</script>
+</body>
+</html>
